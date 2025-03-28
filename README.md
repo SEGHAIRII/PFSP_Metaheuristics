@@ -35,6 +35,11 @@ This project implements various metaheuristic algorithms to solve the Permutatio
    - Heuristic information
    - Pheromone evaporation and update
 
+7. Ant Colony Optimization
+   - Pheromone-based construction
+   - Heuristic information
+   - Pheromone evaporation and update
+
 ## Building the Project
 
 ### Prerequisites
@@ -79,3 +84,4 @@ The program will output:
   - Method name
   - Best makespan found
   - Execution time
+

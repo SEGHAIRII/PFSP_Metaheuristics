@@ -102,6 +102,11 @@ int main(int argc, char* argv[]) {
         Solution gaSol = ga.solve();
         printResults("Genetic Algorithm", gaSol, ga.getExecutionTime());
         
+        std::cout << "Running Ant Colony Optimization..." << std::endl;
+        AntColony aco(problem);
+        Solution acoSol = aco.solve();
+        printResults("Ant Colony Optimization", acoSol, aco.getExecutionTime());
+        
         std::cout << std::string(80, '-') << std::endl;
         
         // Print overall best solution
@@ -111,7 +116,8 @@ int main(int argc, char* argv[]) {
             {"Iterated Local Search", ilsSol},
             {"Simulated Annealing", saSol},
             {"Tabu Search", tsSol},
-            {"Genetic Algorithm", gaSol}
+            {"Genetic Algorithm", gaSol},
+            {"Ant Colony Optimization", acoSol}
         };
         
         auto bestSolution = std::min_element(
