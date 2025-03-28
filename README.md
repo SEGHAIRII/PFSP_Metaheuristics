@@ -29,12 +29,17 @@ This project implements various metaheuristic algorithms to solve the Permutatio
 6. Genetic Algorithm
    - Population management
    - Crossover and mutation operators
+  
+7. Ant Colony Optimization
+   - Pheromone-based construction
+   - Heuristic information
+   - Pheromone evaporation and update
 
 ## Building the Project
 
 ### Prerequisites
 
-- CMake (version 3.10 or higher)
+- CMake
 - C++17 compatible compiler
 
 ### Build Instructions
@@ -55,6 +60,7 @@ The program takes an input file as a command-line argument. The input file shoul
 
 Example input file format:
 ```
+3 3
 2 3 4
 3 4 2
 4 2 3
@@ -73,7 +79,3 @@ The program will output:
   - Method name
   - Best makespan found
   - Execution time
-
-## License
-
-This project is open source and available under the MIT License. 
