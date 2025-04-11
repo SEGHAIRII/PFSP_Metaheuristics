@@ -3,7 +3,11 @@
 #include <algorithm>
 #include <numeric>
 
-LocalSearch::LocalSearch(const Problem& problem) : Metaheuristic(problem) {}
+LocalSearch::LocalSearch(const Problem& problem) 
+    : Metaheuristic(problem), maxIterations(1000) {}
+
+LocalSearch::LocalSearch(const Problem& problem, int maxIterations) 
+    : Metaheuristic(problem), maxIterations(maxIterations) {}
 
 Solution LocalSearch::solve() {
     startTimer();
@@ -31,7 +35,7 @@ Solution LocalSearch::solve() {
         if (reverseNeighborhood()) improved = true;
         
         iterations++;
-    } while (improved && iterations < MAX_ITERATIONS);
+    } while (improved && iterations < maxIterations);
     
     stopTimer();
     return bestSolution;

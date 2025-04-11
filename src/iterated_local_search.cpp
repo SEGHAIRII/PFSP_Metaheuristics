@@ -3,7 +3,11 @@
 #include <algorithm>
 #include <numeric>
 
-IteratedLocalSearch::IteratedLocalSearch(const Problem& problem) : Metaheuristic(problem) {}
+IteratedLocalSearch::IteratedLocalSearch(const Problem& problem) 
+    : Metaheuristic(problem), maxIterations(100), perturbationStrength(3) {}
+
+IteratedLocalSearch::IteratedLocalSearch(const Problem& problem, int maxIterations, int perturbationStrength) 
+    : Metaheuristic(problem), maxIterations(maxIterations), perturbationStrength(perturbationStrength) {}
 
 Solution IteratedLocalSearch::solve() {
     startTimer();
@@ -20,7 +24,7 @@ Solution IteratedLocalSearch::solve() {
     bestSolution = current;
     
     int iterations = 0;
-    while (iterations < MAX_ITERATIONS) {
+    while (iterations < maxIterations) {
         Solution previous = current;
         perturbation(current);
         localSearch(current);
@@ -45,7 +49,7 @@ void IteratedLocalSearch::perturbation(Solution& current) {
     std::uniform_int_distribution<> dis(0, problem.getNumJobs() - 1);
     
     // Perform random swaps
-    for (int i = 0; i < PERTURBATION_STRENGTH; ++i) {
+    for (int i = 0; i < perturbationStrength; ++i) {
         int pos1 = dis(gen);
         int pos2 = dis(gen);
         if (pos1 != pos2) {

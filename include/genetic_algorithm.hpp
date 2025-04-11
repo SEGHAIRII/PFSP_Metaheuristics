@@ -6,7 +6,12 @@
 
 class GeneticAlgorithm : public Metaheuristic {
 public:
+    // Default constructor
     GeneticAlgorithm(const Problem& problem);
+    
+    // Parameterized constructor
+    GeneticAlgorithm(const Problem& problem, int populationSize, int maxGenerations, double mutationRate);
+    
     Solution solve() override;
     
 private:
@@ -23,9 +28,9 @@ private:
     void mutation();
     
     // Parameters
-    static constexpr int POPULATION_SIZE = 50;
-    static constexpr int MAX_GENERATIONS = 100;
-    static constexpr double MUTATION_RATE = 0.1;
+    int populationSize;
+    int maxGenerations;
+    double mutationRate;
     
     // Population
     std::vector<Individual> population;

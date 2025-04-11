@@ -4,7 +4,12 @@
 
 class LocalSearch : public Metaheuristic {
 public:
+    // Default constructor
     LocalSearch(const Problem& problem);
+    
+    // Parameterized constructor
+    LocalSearch(const Problem& problem, int maxIterations);
+    
     Solution solve() override;
     
 private:
@@ -14,5 +19,5 @@ private:
     bool reverseNeighborhood();
     
     // Parameters
-    static constexpr int MAX_ITERATIONS = 1000;
+    int maxIterations;
 }; 

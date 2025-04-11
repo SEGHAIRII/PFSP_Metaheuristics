@@ -7,7 +7,12 @@
 
 class TabuSearch : public Metaheuristic {
 public:
+    // Default constructor
     TabuSearch(const Problem& problem);
+    
+    // Parameterized constructor
+    TabuSearch(const Problem& problem, int maxIterations, int tabuListSize);
+    
     Solution solve() override;
     
 private:
@@ -17,8 +22,8 @@ private:
     std::pair<int, int> findBestNeighbor();
     
     // Parameters
-    static constexpr int MAX_ITERATIONS = 1000;
-    static constexpr int TABU_LIST_SIZE = 10;
+    int maxIterations;
+    int tabuListSize;
     
     // Tabu list
     std::deque<std::pair<int, int>> tabuList;

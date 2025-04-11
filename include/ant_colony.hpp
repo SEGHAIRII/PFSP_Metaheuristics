@@ -6,7 +6,13 @@
 
 class AntColony : public Metaheuristic {
 public:
+    // Default constructor
     AntColony(const Problem& problem);
+    
+    // Parameterized constructor
+    AntColony(const Problem& problem, int numAnts, int maxIterations, 
+              double evaporationRate, double alpha, double beta);
+    
     Solution solve() override;
     
 private:
@@ -16,11 +22,11 @@ private:
     };
     
     // Parameters
-    static constexpr int NUM_ANTS = 20;
-    static constexpr int MAX_ITERATIONS = 100;
-    static constexpr double EVAPORATION_RATE = 0.1;
-    static constexpr double ALPHA = 1.0;  // Pheromone importance
-    static constexpr double BETA = 2.0;   // Heuristic importance
+    int numAnts;
+    int maxIterations;
+    double evaporationRate;
+    double alpha;  // Pheromone importance
+    double beta;   // Heuristic importance
     
     // Components
     void initializePheromones();

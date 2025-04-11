@@ -5,7 +5,13 @@
 
 class SimulatedAnnealing : public Metaheuristic {
 public:
+    // Default constructor
     SimulatedAnnealing(const Problem& problem);
+    
+    // Parameterized constructor
+    SimulatedAnnealing(const Problem& problem, int maxIterations, 
+                       double initialTemperature, double coolingRate);
+    
     Solution solve() override;
     
 private:
@@ -14,9 +20,9 @@ private:
     void updateTemperature();
     
     // Parameters
-    static constexpr int MAX_ITERATIONS = 1000;
-    static constexpr double INITIAL_TEMPERATURE = 1000.0;
-    static constexpr double COOLING_RATE = 0.95;
+    int maxIterations;
+    double initialTemperature;
+    double coolingRate;
     
     // State variables
     double temperature;

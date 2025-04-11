@@ -3,7 +3,18 @@
 #include <algorithm>
 
 GeneticAlgorithm::GeneticAlgorithm(const Problem& problem) 
-    : Metaheuristic(problem), gen(rd()) {}
+    : Metaheuristic(problem), 
+      populationSize(50), 
+      maxGenerations(100), 
+      mutationRate(0.1), 
+      gen(rd()) {}
+
+GeneticAlgorithm::GeneticAlgorithm(const Problem& problem, int populationSize, int maxGenerations, double mutationRate) 
+    : Metaheuristic(problem), 
+      populationSize(populationSize), 
+      maxGenerations(maxGenerations), 
+      mutationRate(mutationRate), 
+      gen(rd()) {}
 
 Solution GeneticAlgorithm::solve() {
     startTimer();
@@ -11,7 +22,7 @@ Solution GeneticAlgorithm::solve() {
     initializePopulation();
     int generation = 0;
     
-    while (generation < MAX_GENERATIONS) {
+    while (generation < maxGenerations) {
         evaluatePopulation();
         selection();
         crossover();
@@ -31,7 +42,7 @@ Solution GeneticAlgorithm::solve() {
 }
 
 void GeneticAlgorithm::initializePopulation() {
-    population.resize(POPULATION_SIZE);
+    population.resize(populationSize);
     for (auto& individual : population) {
         individual.permutation.resize(problem.getNumJobs());
         std::iota(individual.permutation.begin(), individual.permutation.end(), 0);
@@ -50,9 +61,9 @@ void GeneticAlgorithm::evaluatePopulation() {
 void GeneticAlgorithm::selection() {
     // Tournament selection
     std::vector<Individual> newPopulation;
-    std::uniform_int_distribution<> dis(0, POPULATION_SIZE - 1);
+    std::uniform_int_distribution<> dis(0, populationSize - 1);
     
-    while (newPopulation.size() < POPULATION_SIZE) {
+    while (newPopulation.size() < populationSize) {
         // Select two individuals for tournament
         int idx1 = dis(gen);
         int idx2 = dis(gen);
@@ -101,9 +112,6 @@ void GeneticAlgorithm::crossover() {
             used2[population[i + 1].permutation[start + j]] = true;
         }
         
-        int pos1 = (start + length) % problem.getNumJobs();
-        int pos2 = (start + length) % problem.getNumJobs();
-        
         for (int j = 0; j < problem.getNumJobs(); ++j) {
             int curr1 = (start + length + j) % problem.getNumJobs();
             int curr2 = (start + length + j) % problem.getNumJobs();
@@ -135,7 +143,7 @@ void GeneticAlgorithm::mutation() {
     std::uniform_int_distribution<> posDis(0, problem.getNumJobs() - 1);
     
     for (auto& individual : population) {
-        if (dis(gen) < MUTATION_RATE) {
+        if (dis(gen) < mutationRate) {
             // Swap mutation
             int pos1 = posDis(gen);
             int pos2 = posDis(gen);

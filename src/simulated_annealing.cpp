@@ -5,7 +5,23 @@
 #include <cmath>
 
 SimulatedAnnealing::SimulatedAnnealing(const Problem& problem) 
-    : Metaheuristic(problem), gen(rd()), temperature(INITIAL_TEMPERATURE), iterations(0) {}
+    : Metaheuristic(problem), 
+      maxIterations(1000),
+      initialTemperature(1000.0),
+      coolingRate(0.95),
+      temperature(initialTemperature), 
+      iterations(0), 
+      gen(rd()) {}
+
+SimulatedAnnealing::SimulatedAnnealing(const Problem& problem, int maxIterations, 
+                                      double initialTemperature, double coolingRate) 
+    : Metaheuristic(problem), 
+      maxIterations(maxIterations),
+      initialTemperature(initialTemperature),
+      coolingRate(coolingRate),
+      temperature(initialTemperature), 
+      iterations(0), 
+      gen(rd()) {}
 
 Solution SimulatedAnnealing::solve() {
     startTimer();
@@ -20,9 +36,9 @@ Solution SimulatedAnnealing::solve() {
     bestSolution = current;
     
     iterations = 0;
-    temperature = INITIAL_TEMPERATURE;
+    temperature = initialTemperature;
     
-    while (iterations < MAX_ITERATIONS) {
+    while (iterations < maxIterations) {
         // Generate random neighbor
         std::uniform_int_distribution<> dis(0, problem.getNumJobs() - 1);
         int pos1 = dis(gen);
@@ -58,5 +74,5 @@ bool SimulatedAnnealing::acceptWorseSolution(int currentMakespan, int newMakespa
 }
 
 void SimulatedAnnealing::updateTemperature() {
-    temperature *= COOLING_RATE;
+    temperature *= coolingRate;
 } 

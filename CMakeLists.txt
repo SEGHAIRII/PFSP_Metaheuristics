@@ -17,6 +17,7 @@ set(SOURCES
     src/tabu_search.cpp
     src/genetic_algorithm.cpp
     src/ant_colony.cpp
+    src/grid_search.cpp
 )
 
 # Add header files
@@ -31,6 +32,7 @@ set(HEADERS
     include/tabu_search.hpp
     include/genetic_algorithm.hpp
     include/ant_colony.hpp
+    include/grid_search.hpp
 )
 
 # Create executable

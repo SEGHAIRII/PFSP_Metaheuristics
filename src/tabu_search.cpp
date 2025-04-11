@@ -3,7 +3,11 @@
 #include <algorithm>
 #include <numeric>
 
-TabuSearch::TabuSearch(const Problem& problem) : Metaheuristic(problem) {}
+TabuSearch::TabuSearch(const Problem& problem) 
+    : Metaheuristic(problem), maxIterations(1000), tabuListSize(10) {}
+
+TabuSearch::TabuSearch(const Problem& problem, int maxIterations, int tabuListSize) 
+    : Metaheuristic(problem), maxIterations(maxIterations), tabuListSize(tabuListSize) {}
 
 Solution TabuSearch::solve() {
     startTimer();
@@ -20,7 +24,7 @@ Solution TabuSearch::solve() {
     bestSolution = current;
     
     int iterations = 0;
-    while (iterations < MAX_ITERATIONS) {
+    while (iterations < maxIterations) {
         auto [i, j] = findBestNeighbor();
         if (i != -1 && j != -1) {
             current.swap(i, j);
@@ -46,7 +50,7 @@ bool TabuSearch::isTabu(int i, int j) const {
 
 void TabuSearch::updateTabuList(int i, int j) {
     tabuList.push_back({i, j});
-    if (tabuList.size() > TABU_LIST_SIZE) {
+    if (tabuList.size() > tabuListSize) {
         tabuList.pop_front();
     }
 }

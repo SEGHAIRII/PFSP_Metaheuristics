@@ -4,7 +4,12 @@
 
 class IteratedLocalSearch : public Metaheuristic {
 public:
+    // Default constructor
     IteratedLocalSearch(const Problem& problem);
+    
+    // Parameterized constructor
+    IteratedLocalSearch(const Problem& problem, int maxIterations, int perturbationStrength);
+    
     Solution solve() override;
     
 private:
@@ -13,6 +18,6 @@ private:
     void localSearch(Solution& current);
     
     // Parameters
-    static constexpr int MAX_ITERATIONS = 100;
-    static constexpr int PERTURBATION_STRENGTH = 3;
+    int maxIterations;
+    int perturbationStrength;
 }; 

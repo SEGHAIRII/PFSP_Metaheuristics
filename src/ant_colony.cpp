@@ -3,8 +3,29 @@
 #include <algorithm>
 
 AntColony::AntColony(const Problem& problem) 
-    : Metaheuristic(problem), gen(rd()) {
-    ants.resize(NUM_ANTS);
+    : Metaheuristic(problem), 
+      numAnts(20),
+      maxIterations(100),
+      evaporationRate(0.1),
+      alpha(1.0),
+      beta(2.0),
+      gen(rd()) {
+    ants.resize(numAnts);
+    for (auto& ant : ants) {
+        ant.permutation.resize(problem.getNumJobs());
+    }
+}
+
+AntColony::AntColony(const Problem& problem, int numAnts, int maxIterations, 
+                     double evaporationRate, double alpha, double beta) 
+    : Metaheuristic(problem), 
+      numAnts(numAnts),
+      maxIterations(maxIterations),
+      evaporationRate(evaporationRate),
+      alpha(alpha),
+      beta(beta),
+      gen(rd()) {
+    ants.resize(numAnts);
     for (auto& ant : ants) {
         ant.permutation.resize(problem.getNumJobs());
     }
@@ -16,7 +37,7 @@ Solution AntColony::solve() {
     initializePheromones();
     int iterations = 0;
     
-    while (iterations < MAX_ITERATIONS) {
+    while (iterations < maxIterations) {
         constructSolutions();
         updatePheromones();
         
@@ -56,8 +77,8 @@ void AntColony::constructSolutions() {
             // Calculate probabilities
             for (int j = 0; j < n; ++j) {
                 if (!used[j]) {
-                    probabilities[j] = std::pow(pheromones[ant.permutation[i-1]][j], ALPHA) *
-                                     std::pow(calculateHeuristic(ant.permutation[i-1], j), BETA);
+                    probabilities[j] = std::pow(pheromones[ant.permutation[i-1]][j], alpha) *
+                                     std::pow(calculateHeuristic(ant.permutation[i-1], j), beta);
                     sum += probabilities[j];
                 }
             }
@@ -108,7 +129,7 @@ void AntColony::updatePheromones() {
     // Evaporate pheromones
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < n; ++j) {
-            pheromones[i][j] *= (1.0 - EVAPORATION_RATE);
+            pheromones[i][j] *= (1.0 - evaporationRate);
         }
     }
     
