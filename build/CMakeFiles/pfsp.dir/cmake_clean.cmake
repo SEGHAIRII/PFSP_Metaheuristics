@@ -5,6 +5,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/pfsp.dir/src/constructive.cpp.o.d"
   "CMakeFiles/pfsp.dir/src/genetic_algorithm.cpp.o"
   "CMakeFiles/pfsp.dir/src/genetic_algorithm.cpp.o.d"
+  "CMakeFiles/pfsp.dir/src/grid_search.cpp.o"
+  "CMakeFiles/pfsp.dir/src/grid_search.cpp.o.d"
   "CMakeFiles/pfsp.dir/src/iterated_local_search.cpp.o"
   "CMakeFiles/pfsp.dir/src/iterated_local_search.cpp.o.d"
   "CMakeFiles/pfsp.dir/src/local_search.cpp.o"

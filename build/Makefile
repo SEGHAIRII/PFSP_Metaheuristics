@@ -201,6 +201,30 @@ src/genetic_algorithm.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/pfsp.dir/build.make CMakeFiles/pfsp.dir/src/genetic_algorithm.cpp.s
 .PHONY : src/genetic_algorithm.cpp.s
 
+src/grid_search.o: src/grid_search.cpp.o
+.PHONY : src/grid_search.o
+
+# target to build an object file
+src/grid_search.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pfsp.dir/build.make CMakeFiles/pfsp.dir/src/grid_search.cpp.o
+.PHONY : src/grid_search.cpp.o
+
+src/grid_search.i: src/grid_search.cpp.i
+.PHONY : src/grid_search.i
+
+# target to preprocess a source file
+src/grid_search.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pfsp.dir/build.make CMakeFiles/pfsp.dir/src/grid_search.cpp.i
+.PHONY : src/grid_search.cpp.i
+
+src/grid_search.s: src/grid_search.cpp.s
+.PHONY : src/grid_search.s
+
+# target to generate assembly for a file
+src/grid_search.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pfsp.dir/build.make CMakeFiles/pfsp.dir/src/grid_search.cpp.s
+.PHONY : src/grid_search.cpp.s
+
 src/iterated_local_search.o: src/iterated_local_search.cpp.o
 .PHONY : src/iterated_local_search.o
 
@@ -411,6 +435,9 @@ help:
 	@echo "... src/genetic_algorithm.o"
 	@echo "... src/genetic_algorithm.i"
 	@echo "... src/genetic_algorithm.s"
+	@echo "... src/grid_search.o"
+	@echo "... src/grid_search.i"
+	@echo "... src/grid_search.s"
 	@echo "... src/iterated_local_search.o"
 	@echo "... src/iterated_local_search.i"
 	@echo "... src/iterated_local_search.s"
