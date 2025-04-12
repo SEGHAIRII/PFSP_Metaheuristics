@@ -1,4 +1,5 @@
 #include "tabu_search.hpp"
+#include "constructive.hpp"
 #include <random>
 #include <algorithm>
 #include <numeric>
@@ -9,37 +10,32 @@ TabuSearch::TabuSearch(const Problem& problem)
 TabuSearch::TabuSearch(const Problem& problem, int maxIterations, int tabuListSize) 
     : Metaheuristic(problem), maxIterations(maxIterations), tabuListSize(tabuListSize) {}
 
-Solution TabuSearch::solve() {
-    startTimer();
+    Solution TabuSearch::solve() {
+        Constructive neh = Constructive(problem);
+        Solution initial_solution = neh.solve();
+        startTimer();
     
-    // Initialize with a random solution
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::vector<int> initialPerm(problem.getNumJobs());
-    std::iota(initialPerm.begin(), initialPerm.end(), 0);
-    std::shuffle(initialPerm.begin(), initialPerm.end(), gen);
+        bestSolution = initial_solution;
     
-    Solution current(problem);
-    current.setPermutation(initialPerm);
-    bestSolution = current;
+        Solution current = bestSolution;
+        int iterations = 0;
     
-    int iterations = 0;
-    while (iterations < maxIterations) {
-        auto [i, j] = findBestNeighbor();
-        if (i != -1 && j != -1) {
-            current.swap(i, j);
-            updateTabuList(i, j);
-            
-            if (current.getMakespan() < bestSolution.getMakespan()) {
-                bestSolution = current;
+        while (iterations < maxIterations) {
+            auto [i, j] = findBestNeighbor();
+            if (i != -1 && j != -1) {
+                current.swap(i, j);
+                updateTabuList(i, j);
+    
+                if (current.getMakespan() < bestSolution.getMakespan()) {
+                    bestSolution = current;
+                }
             }
+            iterations++;
         }
-        iterations++;
-    }
     
-    stopTimer();
-    return bestSolution;
-}
+        stopTimer();
+        return bestSolution;
+    }
 
 bool TabuSearch::isTabu(int i, int j) const {
     auto pair1 = std::make_pair(i, j);

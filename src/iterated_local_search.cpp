@@ -1,4 +1,5 @@
 #include "iterated_local_search.hpp"
+#include "constructive.hpp"
 #include <random>
 #include <algorithm>
 #include <numeric>
@@ -9,39 +10,37 @@ IteratedLocalSearch::IteratedLocalSearch(const Problem& problem)
 IteratedLocalSearch::IteratedLocalSearch(const Problem& problem, int maxIterations, int perturbationStrength) 
     : Metaheuristic(problem), maxIterations(maxIterations), perturbationStrength(perturbationStrength) {}
 
-Solution IteratedLocalSearch::solve() {
-    startTimer();
+    Solution IteratedLocalSearch::solve() {
+        Constructive neh = Constructive(problem);
+        Solution initial_solution = neh.solve();
+        startTimer();
     
-    // Initialize with a random solution
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::vector<int> initialPerm(problem.getNumJobs());
-    std::iota(initialPerm.begin(), initialPerm.end(), 0);
-    std::shuffle(initialPerm.begin(), initialPerm.end(), gen);
-    
-    Solution current(problem);
-    current.setPermutation(initialPerm);
-    bestSolution = current;
-    
-    int iterations = 0;
-    while (iterations < maxIterations) {
-        Solution previous = current;
-        perturbation(current);
-        localSearch(current);
+        // Initialize with NEH heuristic
         
-        // Accept if better or with probability
-        if (current.getMakespan() < bestSolution.getMakespan()) {
-            bestSolution = current;
-        } else {
-            current = previous;
+        
+        bestSolution = initial_solution;
+    
+        Solution current = bestSolution;
+        int iterations = 0;
+    
+        while (iterations < maxIterations) {
+            Solution previous = current;
+            perturbation(current);
+            localSearch(current);
+    
+            // Accept if better or with probability
+            if (current.getMakespan() < bestSolution.getMakespan()) {
+                bestSolution = current;
+            } else {
+                current = previous;
+            }
+    
+            iterations++;
         }
-        
-        iterations++;
-    }
     
-    stopTimer();
-    return bestSolution;
-}
+        stopTimer();
+        return bestSolution;
+    }
 
 void IteratedLocalSearch::perturbation(Solution& current) {
     std::random_device rd;

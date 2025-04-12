@@ -1,4 +1,5 @@
 #include "local_search.hpp"
+#include "constructive.hpp"
 #include <random>
 #include <algorithm>
 #include <numeric>
@@ -10,35 +11,29 @@ LocalSearch::LocalSearch(const Problem& problem, int maxIterations)
     : Metaheuristic(problem), maxIterations(maxIterations) {}
 
 Solution LocalSearch::solve() {
-    startTimer();
+    Constructive neh = Constructive(problem);
+        Solution initial_solution = neh.solve();
+        startTimer();
     
-    // Initialize with a random solution
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::vector<int> initialPerm(problem.getNumJobs());
-    std::iota(initialPerm.begin(), initialPerm.end(), 0);
-    std::shuffle(initialPerm.begin(), initialPerm.end(), gen);
+        bestSolution = initial_solution;
     
-    Solution current(problem);
-    current.setPermutation(initialPerm);
-    bestSolution = current;
+        Solution current = bestSolution;
+        bool improved;
+        int iterations = 0;
     
-    bool improved;
-    int iterations = 0;
+        do {
+            improved = false;
     
-    do {
-        improved = false;
-        
-        // Try different neighborhoods
-        if (swapNeighborhood()) improved = true;
-        if (insertNeighborhood()) improved = true;
-        if (reverseNeighborhood()) improved = true;
-        
-        iterations++;
-    } while (improved && iterations < maxIterations);
+            // Try different neighborhoods
+            if (swapNeighborhood()) improved = true;
+            if (insertNeighborhood()) improved = true;
+            if (reverseNeighborhood()) improved = true;
     
-    stopTimer();
-    return bestSolution;
+            iterations++;
+        } while (improved && iterations < maxIterations);
+    
+        stopTimer();
+        return bestSolution;
 }
 
 bool LocalSearch::swapNeighborhood() {

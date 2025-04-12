@@ -1,4 +1,5 @@
 #include "simulated_annealing.hpp"
+#include "constructive.hpp"
 #include <random>
 #include <algorithm>
 #include <numeric>
@@ -23,48 +24,44 @@ SimulatedAnnealing::SimulatedAnnealing(const Problem& problem, int maxIterations
       iterations(0), 
       gen(rd()) {}
 
-Solution SimulatedAnnealing::solve() {
-    startTimer();
+      Solution SimulatedAnnealing::solve() {
+        Constructive neh = Constructive(problem);
+        Solution initial_solution = neh.solve();
+        startTimer();
     
-    // Initialize with a random solution
-    std::vector<int> initialPerm(problem.getNumJobs());
-    std::iota(initialPerm.begin(), initialPerm.end(), 0);
-    std::shuffle(initialPerm.begin(), initialPerm.end(), gen);
+        bestSolution = initial_solution;
     
-    Solution current(problem);
-    current.setPermutation(initialPerm);
-    bestSolution = current;
+        Solution current = bestSolution;
+        iterations = 0;
+        temperature = initialTemperature;
     
-    iterations = 0;
-    temperature = initialTemperature;
+        while (iterations < maxIterations) {
+            // Generate random neighbor
+            std::uniform_int_distribution<> dis(0, problem.getNumJobs() - 1);
+            int pos1 = dis(gen);
+            int pos2 = dis(gen);
+            if (pos1 != pos2) {
+                Solution neighbor = current;
+                neighbor.swap(pos1, pos2);
     
-    while (iterations < maxIterations) {
-        // Generate random neighbor
-        std::uniform_int_distribution<> dis(0, problem.getNumJobs() - 1);
-        int pos1 = dis(gen);
-        int pos2 = dis(gen);
-        if (pos1 != pos2) {
-            Solution neighbor = current;
-            neighbor.swap(pos1, pos2);
-            
-            // Accept if better or with probability
-            if (neighbor.getMakespan() < current.getMakespan() || 
-                acceptWorseSolution(current.getMakespan(), neighbor.getMakespan())) {
-                current = neighbor;
-                
-                if (current.getMakespan() < bestSolution.getMakespan()) {
-                    bestSolution = current;
+                // Accept if better or with probability
+                if (neighbor.getMakespan() < current.getMakespan() || 
+                    acceptWorseSolution(current.getMakespan(), neighbor.getMakespan())) {
+                    current = neighbor;
+    
+                    if (current.getMakespan() < bestSolution.getMakespan()) {
+                        bestSolution = current;
+                    }
                 }
             }
-        }
-        
-        updateTemperature();
-        iterations++;
-    }
     
-    stopTimer();
-    return bestSolution;
-}
+            updateTemperature();
+            iterations++;
+        }
+    
+        stopTimer();
+        return bestSolution;
+    }
 
 bool SimulatedAnnealing::acceptWorseSolution(int currentMakespan, int newMakespan) {
     std::uniform_real_distribution<> dis(0.0, 1.0);
